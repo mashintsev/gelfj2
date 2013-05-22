@@ -20,7 +20,6 @@ GelfAppender will use the log message as a short message and a stacktrace (if ex
 
 To use GELF Facility as appender in Log4j2 (XML configuration format):
 
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration status="debug" packages="org.graylog2.log4j2">
 	<appenders>
 		<GELF
