@@ -18,35 +18,33 @@ Log4j2 appender
 
 GelfAppender will use the log message as a short message and a stacktrace (if exception available) as a long message if "extractStacktrace" is true.
 
-To use GELF Facility as appender in Log4j2 (XML configuration format):
+To use GELF Facility as appender in Log4j2 (XML configuration format).
+
+Use attribute packages with value "org.graylog2.log4j2" for include GelfAppender plugin:
 
 <configuration status="debug" packages="org.graylog2.log4j2">
-	<appenders>
-		<GELF
-				name="graylog2"
-				graylogHost="127.0.0.1"
-				graylogPort="12201"
-				originHost="my.machine.example.com"
-				additionalFields="{'environment': 'DEV', 'application': 'MyAPP'}"
-				extractStacktrace="true"
-				addExtendedInformation="true"
-				facility="USER"
-				includeLocation="true">
-			<PatternLayout>
-				<pattern>%d %-5p [%t] %C{2} (%F:%L) - %m%n</pattern>
-			</PatternLayout>
-		</GELF>
-		<Async name="ASYNC">
-			<appender-ref ref="graylog2"/>
-			<appender-ref ref="CONSOLE"/>
-		</Async>
-	</appenders>
-	<loggers>
-		<root level="info">
-			<appender-ref ref="graylog2" level="info"/>
-		</root>
-	</loggers>
-</configuration>
+
+Add GELF tag to appenders description:
+	<GELF
+			name="graylog2"
+			graylogHost="127.0.0.1"
+			graylogPort="12201"
+			originHost="my.machine.example.com"
+			additionalFields="{'environment': 'DEV', 'application': 'MyAPP'}"
+			extractStacktrace="true"
+			addExtendedInformation="true"
+			facility="USER"
+			includeLocation="true">
+		<PatternLayout>
+			<pattern>%d %-5p [%t] %C{2} (%F:%L) - %m%n</pattern>
+		</PatternLayout>
+	</GELF>
+
+and then add it as a one of appenders:
+
+	<root level="info">
+		<appender-ref ref="graylog2" level="info"/>
+	</root>
 
 Options
 -------
