@@ -22,9 +22,10 @@ To use GELF Facility as appender in Log4j2 (XML configuration format).
 
 Use attribute packages with value "org.graylog2.log4j2" for include GelfAppender plugin:
 
-<configuration status="debug" packages="org.graylog2.log4j2">
+	<configuration status="debug" packages="org.graylog2.log4j2">
 
 Add GELF tag to appenders description:
+
 	<GELF
 			name="graylog2"
 			graylogHost="127.0.0.1"
