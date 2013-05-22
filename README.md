@@ -1,4 +1,4 @@
-GELFJ - A GELF Appender for Log4j
+GELFJ - A GELF Appender for Log4j2
 ====================================================================
 
 ### WARNING: Latest version of this library is not compatible with graylog2-server < 0.9.6. 
@@ -11,7 +11,7 @@ It's very simple GELF implementation in pure Java with the Log4j2 appender. It s
 How to use GELFJ
 ----------------
 
-Drop the latest JAR into your classpath and configure Log4j to use it.
+Drop the latest JAR into your classpath and configure Log4j2 to use it.
 
 Log4j2 appender
 --------------
@@ -21,7 +21,7 @@ GelfAppender will use the log message as a short message and a stacktrace (if ex
 To use GELF Facility as appender in Log4j2 (XML configuration format):
 
 	<GELF
-			name="gelf"
+			name="graylog2"
 			graylogHost="127.0.0.1"
 			graylogPort="12201"
 			originHost="my.machine.example.com"

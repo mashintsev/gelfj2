@@ -6,7 +6,7 @@
     </Console>
 
     <GELF
-            name="gelf"
+            name="graylog2"
             graylogHost="127.0.0.1"
             graylogPort="12201"
             originHost="my.machine.example.com"
@@ -22,13 +22,13 @@
         </PatternLayout>
     </GELF>
     <Async name="ASYNC">
-        <appender-ref ref="gelf"/>
+        <appender-ref ref="graylog2"/>
         <appender-ref ref="CONSOLE"/>
     </Async>
 </appenders>
 <loggers>
     <root level="info">
-        <appender-ref ref="gelf" level="info"/>
+        <appender-ref ref="graylog2" level="info"/>
     </root>
 </loggers>
 </configuration>
