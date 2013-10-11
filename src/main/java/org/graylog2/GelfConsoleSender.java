@@ -10,12 +10,12 @@ public class GelfConsoleSender implements GelfSender {
     public Target target;
 
     public GelfConsoleSender(Target t) {
-		this.target = t;
-	}
+        this.target = t;
+    }
 
-	public boolean sendMessage(GelfMessage message) {
-		return message.isValid() && AppendToConsole(message.toJson() + "\n");
-	}
+    public boolean sendMessage(GelfMessage message) {
+        return message.isValid() && AppendToConsole(message.toJson() + "\n");
+    }
 
     public void close() {
         //We can never close stdout/stderr.
