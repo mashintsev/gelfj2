@@ -5,7 +5,7 @@ import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.config.plugins.PluginAttr;
+import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.filter.ThresholdFilter;
@@ -24,11 +24,12 @@ import java.util.Map;
 /**
  * @author Jay Faulkner
  */
-@Plugin(name = "GELF", category = "Core", elementType = "appender", printObject = true)
-public class GelfConsoleAppender<T extends Serializable> extends AbstractAppender<T> implements GelfMessageProvider {
+@Plugin(name = "GELFConsole", category = "Core", elementType = "appender", printObject = true)
+public class GelfConsoleAppender<T extends Serializable> extends AbstractAppender implements GelfMessageProvider {
 
     private static String originHost;
     private String facility;
+    private GelfSender gelfSender;
     private boolean extractStacktrace;
     private boolean addExtendedInformation;
     private boolean includeLocation = true;
@@ -113,17 +114,17 @@ public class GelfConsoleAppender<T extends Serializable> extends AbstractAppende
     }
 
     @PluginFactory
-    public static <S extends Serializable> GelfConsoleAppender<S> createAppender(@PluginAttr("name") final String name,
-                                                                          @PluginAttr("facility") final String facility,
-                                                                          @PluginAttr("target") final String t,
-                                                                          @PluginAttr("extractStacktrace") final String extractStacktrace,
-                                                                          @PluginAttr("originHost") final String originHost,
-                                                                          @PluginAttr("addExtendedInformation") final String addExtendedInformation,
-                                                                          @PluginAttr("includeLocation") final String includeLocation,
-                                                                          @PluginAttr("additionalFields") final String additionalFields,
+    public static <S extends Serializable> GelfConsoleAppender<S> createAppender(@PluginAttribute("name") final String name,
+                                                                          @PluginAttribute("facility") final String facility,
+                                                                          @PluginAttribute("target") final String t,
+                                                                          @PluginAttribute("extractStacktrace") final String extractStacktrace,
+                                                                          @PluginAttribute("originHost") final String originHost,
+                                                                          @PluginAttribute("addExtendedInformation") final String addExtendedInformation,
+                                                                          @PluginAttribute("includeLocation") final String includeLocation,
+                                                                          @PluginAttribute("additionalFields") final String additionalFields,
                                                                           @PluginElement("layout") Layout<S> layout,
                                                                           @PluginElement("filter") Filter filter,
-                                                                          @PluginAttr("suppressExceptions") final String suppressExceptions) {
+                                                                          @PluginAttribute("suppressExceptions") final String suppressExceptions) throws IOException {
         if (name == null) {
             LOGGER.error("No name provided for GelfConsoleAppender");
             return null;
@@ -143,21 +144,21 @@ public class GelfConsoleAppender<T extends Serializable> extends AbstractAppende
         }
 
         // If target is set properly, use it. Otherwise use SYSTEM_OUT
-        final Target target = t == null ? Target.SYSTEM_OUT : Target.valueOf(t)
+        final Target target = t == null ? Target.SYSTEM_OUT : Target.valueOf(t);
 
         gelfSender = getGelfConsoleSender(target);
 
         if (gelfSender != null) {
 
-            GelfAppender gelfAppender = new GelfAppender<S>(name, filter, layout, gelfSender, isHandleExceptions);
-            gelfAppender.setFacility(facility);
-            gelfAppender.setExtractStacktrace(Boolean.parseBoolean(extractStacktrace));
-            gelfAppender.setOriginHost(originHost);
-            gelfAppender.setAddExtendedInformation(Boolean.parseBoolean(addExtendedInformation));
-            gelfAppender.setIncludeLocation(Boolean.parseBoolean(includeLocation));
-            gelfAppender.setAdditionalFields(additionalFields);
+            GelfConsoleAppender gelfConsoleAppender = new GelfConsoleAppender<S>(name, filter, layout, gelfSender, isHandleExceptions);
+            gelfConsoleAppender.setFacility(facility);
+            gelfConsoleAppender.setExtractStacktrace(Boolean.parseBoolean(extractStacktrace));
+            gelfConsoleAppender.setOriginHost(originHost);
+            gelfConsoleAppender.setAddExtendedInformation(Boolean.parseBoolean(addExtendedInformation));
+            gelfConsoleAppender.setIncludeLocation(Boolean.parseBoolean(includeLocation));
+            gelfConsoleAppender.setAdditionalFields(additionalFields);
 
-            return gelfAppender;
+            return gelfConsoleAppender;
         } else {
             return null;
         }
