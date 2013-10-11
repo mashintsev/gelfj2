@@ -114,17 +114,19 @@ public class GelfConsoleAppender<T extends Serializable> extends AbstractAppende
     }
 
     @PluginFactory
-    public static <S extends Serializable> GelfConsoleAppender<S> createAppender(@PluginAttribute("name") final String name,
-                                                                          @PluginAttribute("facility") final String facility,
-                                                                          @PluginAttribute("target") final String t,
-                                                                          @PluginAttribute("extractStacktrace") final String extractStacktrace,
-                                                                          @PluginAttribute("originHost") final String originHost,
-                                                                          @PluginAttribute("addExtendedInformation") final String addExtendedInformation,
-                                                                          @PluginAttribute("includeLocation") final String includeLocation,
-                                                                          @PluginAttribute("additionalFields") final String additionalFields,
-                                                                          @PluginElement("layout") Layout<S> layout,
-                                                                          @PluginElement("filter") Filter filter,
-                                                                          @PluginAttribute("suppressExceptions") final String suppressExceptions) throws IOException {
+    public static <S extends Serializable> GelfConsoleAppender<S> createAppender(
+            @PluginAttribute("name") final String name,
+            @PluginAttribute("facility") final String facility,
+            @PluginAttribute("target") final String t,
+            @PluginAttribute("extractStacktrace") final String extractStacktrace,
+            @PluginAttribute("originHost") final String originHost,
+            @PluginAttribute("addExtendedInformation") final String addExtendedInformation,
+            @PluginAttribute("includeLocation") final String includeLocation,
+            @PluginAttribute("additionalFields") final String additionalFields,
+            @PluginElement("layout") Layout<S> layout,
+            @PluginElement("filter") Filter filter,
+            @PluginAttribute("suppressExceptions") final String suppressExceptions) throws IOException {
+
         if (name == null) {
             LOGGER.error("No name provided for GelfConsoleAppender");
             return null;

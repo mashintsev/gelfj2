@@ -7,56 +7,46 @@ import java.nio.charset.Charset;
 
 public class GelfConsoleSender implements GelfSender {
 
-    public Target target;
+    private Target target;
 
     public GelfConsoleSender(Target t) {
         this.target = t;
     }
 
     public boolean sendMessage(GelfMessage message) {
-        return message.isValid() && AppendToConsole(message.toJson() + "\n");
+        try {
+            if (!message.isValid()) return false;
+            appendToConsole(message.toJson() + "\n");
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
     }
 
     public void close() {
         //We can never close stdout/stderr.
     }
 
-    private boolean AppendToConsole(String message) {
+    private void appendToConsole(String message) throws IOException {
         final String enc = Charset.defaultCharset().name();
 
-        PrintStream printStream = null;
-        if(target == Target.SYSTEM_ERR) {
-            try {
-                printStream = new PrintStream(new SystemErrStream(), true, enc);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                printStream = new PrintStream(new SystemOutStream(), true, enc);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        PrintStream printStream = new PrintStream(getOutputStream(target), true, enc);
+        printStream.write(message.getBytes(enc));
+    }
+
+    private OutputStream getOutputStream(Target t) {
+        if (t.equals(Target.SYSTEM_ERR)) {
+            return new SystemErrStream();
         }
 
-        if (printStream != null) {
-            try {
-                printStream.write(message.getBytes(enc));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return new SystemOutStream();
     }
 
     /**
      * An implementation of OutputStream that redirects to the current System.err.
      */
-    private static class SystemErrStream extends OutputStream {
-        public SystemErrStream() {
-        }
+    private class SystemErrStream extends OutputStream {
 
         @Override
         public void close() {
@@ -88,9 +78,7 @@ public class GelfConsoleSender implements GelfSender {
     /**
      * An implementation of OutputStream that redirects to the current System.out.
      */
-    private static class SystemOutStream extends OutputStream {
-        public SystemOutStream() {
-        }
+    private class SystemOutStream extends OutputStream {
 
         @Override
         public void close() {
@@ -117,6 +105,4 @@ public class GelfConsoleSender implements GelfSender {
             System.out.write(b);
         }
     }
-
-
 }
