@@ -81,6 +81,7 @@ public class GelfConsoleAppender<T extends Serializable> extends AbstractAppende
             hostName = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
             error("Unknown local hostname", e);
+            hostName = "unknown";
         }
 
         return hostName;
@@ -150,20 +151,17 @@ public class GelfConsoleAppender<T extends Serializable> extends AbstractAppende
 
         gelfSender = getGelfConsoleSender(target);
 
-        if (gelfSender != null) {
+        if (gelfSender == null) { return null; }
 
-            GelfConsoleAppender gelfConsoleAppender = new GelfConsoleAppender<S>(name, filter, layout, gelfSender, isHandleExceptions);
-            gelfConsoleAppender.setFacility(facility);
-            gelfConsoleAppender.setExtractStacktrace(Boolean.parseBoolean(extractStacktrace));
-            gelfConsoleAppender.setOriginHost(originHost);
-            gelfConsoleAppender.setAddExtendedInformation(Boolean.parseBoolean(addExtendedInformation));
-            gelfConsoleAppender.setIncludeLocation(Boolean.parseBoolean(includeLocation));
-            gelfConsoleAppender.setAdditionalFields(additionalFields);
+        GelfConsoleAppender gelfConsoleAppender = new GelfConsoleAppender<S>(name, filter, layout, gelfSender, isHandleExceptions);
+        gelfConsoleAppender.setFacility(facility);
+        gelfConsoleAppender.setExtractStacktrace(Boolean.parseBoolean(extractStacktrace));
+        gelfConsoleAppender.setOriginHost(originHost);
+        gelfConsoleAppender.setAddExtendedInformation(Boolean.parseBoolean(addExtendedInformation));
+        gelfConsoleAppender.setIncludeLocation(Boolean.parseBoolean(includeLocation));
+        gelfConsoleAppender.setAdditionalFields(additionalFields);
 
-            return gelfConsoleAppender;
-        } else {
-            return null;
-        }
+        return gelfConsoleAppender;
     }
 
     protected static GelfConsoleSender getGelfConsoleSender(Target target) throws IOException {
