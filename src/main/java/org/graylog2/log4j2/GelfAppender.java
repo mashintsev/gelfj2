@@ -5,7 +5,7 @@ import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.config.plugins.PluginAttr;
+import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.filter.ThresholdFilter;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Ivan Mashintsev
  */
 @Plugin(name = "GELF", category = "Core", elementType = "appender", printObject = true)
-public class GelfAppender<T extends Serializable> extends AbstractAppender<T> implements GelfMessageProvider {
+public class GelfAppender<T extends Serializable> extends AbstractAppender implements GelfMessageProvider {
 
 	private static String originHost;
 	private int graylogPort = 12201;
@@ -122,18 +122,18 @@ public class GelfAppender<T extends Serializable> extends AbstractAppender<T> im
 	 * @return The GelfAppender.
 	 */
 	@PluginFactory
-	public static <S extends Serializable> GelfAppender<S> createAppender(@PluginAttr("name") final String name,
-																		  @PluginAttr("graylogHost") final String graylogHost,
-																		  @PluginAttr("graylogPort") final String graylogPortStr,
-																		  @PluginAttr("facility") final String facility,
-																		  @PluginAttr("extractStacktrace") final String extractStacktrace,
-																		  @PluginAttr("originHost") final String originHost,
-																		  @PluginAttr("addExtendedInformation") final String addExtendedInformation,
-																		  @PluginAttr("includeLocation") final String includeLocation,
-																		  @PluginAttr("additionalFields") final String additionalFields,
+	public static <S extends Serializable> GelfAppender<S> createAppender(@PluginAttribute("name") final String name,
+																		  @PluginAttribute("graylogHost") final String graylogHost,
+																		  @PluginAttribute("graylogPort") final String graylogPortStr,
+																		  @PluginAttribute("facility") final String facility,
+																		  @PluginAttribute("extractStacktrace") final String extractStacktrace,
+																		  @PluginAttribute("originHost") final String originHost,
+																		  @PluginAttribute("addExtendedInformation") final String addExtendedInformation,
+																		  @PluginAttribute("includeLocation") final String includeLocation,
+																		  @PluginAttribute("additionalFields") final String additionalFields,
 																		  @PluginElement("layout") Layout<S> layout,
 																		  @PluginElement("filter") Filter filter,
-																		  @PluginAttr("suppressExceptions") final String suppressExceptions) {
+																		  @PluginAttribute("suppressExceptions") final String suppressExceptions) {
 		if (name == null) {
 			LOGGER.error("No name provided for GelfAppender");
 			return null;

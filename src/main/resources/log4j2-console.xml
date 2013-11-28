@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN" packages="org.graylog2.log4j2">
+<appenders>
+    <GELFConsole
+            name="graylog2"
+            originHost="my.machine.example.com"
+            additionalFields="{'environment': 'DEV', 'application': 'MyAPP'}"
+            extractStacktrace="true"
+            addExtendedInformation="true"
+            facility="USER"
+            includeLocation="true"
+    >
+        <PatternLayout>
+            <pattern>%d %-5p [%t] %C{2} (%F:%L) - %m%n</pattern>
+        </PatternLayout>
+    </GELFConsole>
+</appenders>
+<loggers>
+    <root level="info">
+        <appender-ref ref="graylog2" level="info"/>
+    </root>
+</loggers>
+</configuration>
